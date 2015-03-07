@@ -1,8 +1,3 @@
 Twiml
 =====
 
-```
-twiml do
-  
-end
-```

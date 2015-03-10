@@ -1,11 +1,13 @@
-defmodule Twiml.Mixfile do
+defmodule ExTwiml.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :twiml,
+    [app: :ex_twiml,
+     description: "Generate TwiML with Elixir",
      version: "1.0.0",
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps,
+     package: package]
   end
 
   # Configuration for the OTP application
@@ -26,5 +28,16 @@ defmodule Twiml.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     []
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      contributors: ["Daniel Berkompas"],
+      licenses: ["MIT"],
+      links: %{
+        "Github" => "https://github.com/danielberkompas/ex_twiml"
+      }
+    ]
   end
 end

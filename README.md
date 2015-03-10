@@ -1,5 +1,6 @@
-ExTwiml
+ExTwiml 
 ===================
+[![Build Status](https://travis-ci.org/danielberkompas/ex_twiml.svg)](https://travis-ci.org/danielberkompas/ex_twiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
 Elixir! This is the first step toward a comprehensive Twilio integration library

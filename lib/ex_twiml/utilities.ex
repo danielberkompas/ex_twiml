@@ -1,4 +1,14 @@
 defmodule ExTwiml.Utilities do
+  @moduledoc """
+  A grab bag of helpful functions used to generate XML.
+
+  - `opening_tag/3`: Generate an XML open tag.
+  - `closing_tag/1`: Generate an XML close tag.
+  - `generate_xml_attributes/1`: Generate a list of XML attributes.
+  - `capitalize/1`: Capitalize a string or atom.
+  - `to_camel_case/1`: Convert a string or atom to headless camelCase.
+  """
+
   @doc """
   Generates an opening XML tag.
 

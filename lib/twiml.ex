@@ -31,11 +31,11 @@ defmodule Twiml do
   You'd then need to render this string to the browser.
   """
 
-  @nested_verbs [ :gather, :dial ]
+  @nested_verbs [ :gather, :dial, :message ]
 
   @verbs [
     :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue, 
-    :leave, :hangup, :reject, :pause, :record, :redirect
+    :leave, :hangup, :reject, :pause, :record, :redirect, :body, :media
   ]
 
   @doc """

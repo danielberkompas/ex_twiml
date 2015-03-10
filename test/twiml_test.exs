@@ -149,6 +149,31 @@ defmodule TwimlTest do
     assert_twiml markup, "<Pause length=\"5\" />"
   end
 
+  test "can render the <Message> verb" do
+    markup = twiml do
+      message action: "/hello", method: "post" do
+      end
+    end
+
+    assert_twiml markup, "<Message action=\"/hello\" method=\"post\"></Message>"
+  end
+
+  test "can render the <Body> verb" do
+    markup = twiml do
+      body "Store location: 203"
+    end
+
+    assert_twiml markup, "<Body>Store location: 203</Body>"
+  end
+
+  test "can render the <Media> verb" do
+    markup = twiml do
+      media "https://demo.twilio.com/owl.png"
+    end
+
+    assert_twiml markup, "<Media>https://demo.twilio.com/owl.png</Media>"
+  end
+
   defp assert_twiml(lhs, rhs) do
     assert lhs == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>#{rhs}</Response>"
   end

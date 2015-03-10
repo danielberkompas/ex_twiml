@@ -1,4 +1,4 @@
-defmodule Twiml.Utilities do
+defmodule ExTwiml.Utilities do
   def opening_tag(tag_name, close, options \\ []) do
     "<#{capitalize(tag_name)}#{generate_xml_attributes(options)}#{close}>"
   end

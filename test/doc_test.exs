@@ -1,5 +1,5 @@
 defmodule DocTest do
   use ExUnit.Case
 
-  doctest Twiml
+  doctest ExTwiml
 end

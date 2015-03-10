@@ -1,6 +1,6 @@
-defmodule TwimlTest do
+defmodule ExTwimlTest do
   use ExUnit.Case
-  import Twiml
+  import ExTwiml
 
   test "Can render the <Gather> verb" do
     markup = twiml do

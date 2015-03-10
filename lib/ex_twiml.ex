@@ -1,5 +1,5 @@
-defmodule Twiml do
-  import Twiml.Utilities
+defmodule ExTwiml do
+  import ExTwiml.Utilities
 
   @moduledoc """
   Contains macros to make generating TwiML from Elixir far easier and more 

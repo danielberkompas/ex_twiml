@@ -1,6 +1,6 @@
-defmodule Twiml.UtilitiesTest do
+defmodule ExTwiml.UtilitiesTest do
   use ExUnit.Case
-  import Twiml.Utilities
+  import ExTwiml.Utilities
 
   test ".opening_tag creates an opening XML tag" do
     assert opening_tag(:address, "/") == "<Address/>"

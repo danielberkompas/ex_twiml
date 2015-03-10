@@ -196,8 +196,15 @@ defmodule ExTwiml do
     end
   end
 
+  @doc "Start an Agent to store the TwiML buffer prior to rendering."
   def start_buffer(state), do: Agent.start_link(fn -> state end)
+
+  @doc "Stop a buffer."
   def stop_buffer(buff), do: Agent.stop(buff)
+
+  @doc "Update the buffer by pushing a new tag onto the beginning."
   def put_buffer(buff, content), do: Agent.update(buff, &[content | &1])
+
+  @doc "Render the contents of the buffer into a string."
   def render(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse |> Enum.join
 end

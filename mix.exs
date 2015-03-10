@@ -3,7 +3,7 @@ defmodule Twiml.Mixfile do
 
   def project do
     [app: :twiml,
-     version: "0.0.1",
+     version: "1.0.0",
      elixir: "~> 1.0",
      deps: deps]
   end

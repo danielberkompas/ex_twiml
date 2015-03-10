@@ -1,6 +1,6 @@
 Copyright Daniel Berkompas, 2015.
 
-This product includes the following third-party components:
+This product depends on the following third-party components:
 
      * elixir (https://github.com/elixir-lang/elixir)
 

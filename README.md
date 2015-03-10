@@ -13,7 +13,7 @@ ExTwiml can be installed through mix. First, update your dependencies in
 
 ```elixir
 defp deps
-  [{:extwiml, github: "danielberkompas/extwiml"}]
+  [{:ex_twiml, github: "danielberkompas/ex_twiml"}]
 end
 ```
 

@@ -2,7 +2,7 @@ ExTwiml
 ===================
 [![Build Status](https://travis-ci.org/danielberkompas/ex_twiml.svg)](https://travis-ci.org/danielberkompas/ex_twiml)
 [![Hex Version](http://img.shields.io/hexpm/v/ex_twiml.svg)](https://hex.pm/packages/ex_twiml)
-[![Inline docs](http://inch-ci.org/github/danielberkompas/ex_twiml.svg?branch=master)](http://inch-ci.org/github/danielberkompas/ex_twiml)
+[![Inline docs](http://inch-ci.org/github/danielberkompas/ex_twiml.svg?branch=master)](http://inch-ci.org/github/danielberkompas/extwiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
 Elixir! This is the first step toward a comprehensive Twilio integration library
@@ -10,8 +10,16 @@ I'm writing for Elixir, but it can be used entirely on its own.
 
 ## Installation
 
-ExTwiml can be installed through mix. First, update your dependencies in
-`mix.exs`.
+ExTwiml can be installed through mix as a hex package. First, update your 
+dependencies in `mix.exs`.
+
+```elixir
+defp deps
+  [{:ex_twiml, "~> 1.0.0"}]
+end
+```
+
+If you prefer, you can depend on the latest version from Github:
 
 ```elixir
 defp deps

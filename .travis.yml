@@ -1,3 +1,10 @@
 language: elixir
 otp_release:
   - 17.4
+before_script:
+  - export PATH=`pwd`/elixir/bin:$PATH
+  - mix local.hex --force
+  - mix deps.get --only test
+after_script:
+- MIX_ENV=docs mix deps.get
+- MIX_ENV=docs mix inch.report

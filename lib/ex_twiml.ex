@@ -113,7 +113,7 @@ defmodule ExTwiml do
   #   </Dial>
   Enum.each @nested_verbs, fn verb ->
     @doc """
-    Implements the <#{capitalize verb}> verb. Other verbs can be nested
+    Implements the `<#{capitalize verb}>` verb. Other verbs can be nested
     under this verb, as shown in the examples.
 
     See Twilio's official docs for the <#{capitalize verb}> verb here:
@@ -159,8 +159,8 @@ defmodule ExTwiml do
   #   <Verb option="value" />
   Enum.each @verbs, fn verb ->
     @doc """
-    Implements the <#{capitalize verb}> verb. No other verbs can be nested under
-    this verb.
+    Implements the `<#{capitalize verb}>` verb. No other verbs can be nested 
+    under this verb.
 
     See Twilio's official docs for the <#{capitalize verb}> verb here:
 
@@ -176,7 +176,7 @@ defmodule ExTwiml do
           #{verb} option1: "val", option2: "val"
         end
     """
-    defmacro unquote(verb)(first \\ [], options \\ [])
+    defmacro unquote(verb)(string \\ [], options \\ [])
     defmacro unquote(verb)(string, options) when is_binary(string) do
       current_verb = unquote(verb)
 

@@ -51,16 +51,23 @@ defmodule ExTwiml do
       # The buffer's state is a list of XML fragments. New fragments are 
       # inserted by other macros. Finally, all the fragments are joined
       # together in a string.
-      {:ok, var!(buffer, Twiml)} = start_buffer([header])
+      {:ok, var!(buffer, Twiml)}  = start_buffer([header])
+      {:ok, var!(options, Twiml)} = start_buffer([])
 
       # Wrap the whole block in a <Response> tag
       tag :response do
         unquote(block)
       end
 
-      result = render(var!(buffer, Twiml))   # Convert buffer to string
-      :ok = stop_buffer(var!(buffer, Twiml)) # Kill the Agent
-      result
+      xml  = render(var!(buffer, Twiml))   # Convert buffer to string
+      opts = get_buffer var!(options, Twiml)
+      :ok  = stop_buffer(var!(buffer, Twiml)) # Kill the Agent
+
+      if length(opts) > 0 do
+        {opts, xml}
+      else
+        xml
+      end
     end
   end
 
@@ -177,34 +184,52 @@ defmodule ExTwiml do
         end
     """
     defmacro unquote(verb)(string \\ [], options \\ [])
-    defmacro unquote(verb)(string, options) when is_binary(string) do
+    defmacro unquote(verb)(string_or_options, options) do
       current_verb = unquote(verb)
 
-      quote do
-        tag unquote(current_verb), unquote(options) do
-          text unquote(string)
+      {expanded, _} = Code.eval_quoted(string_or_options, Map.get(__CALLER__, :vars), __ENV__)
+
+      if is_binary(expanded) do
+        quote do
+          tag unquote(current_verb), unquote(options) do
+            text unquote(string_or_options)
+          end
         end
-      end
-    end
-    
-    defmacro unquote(verb)(options, _ignore) do
-      current_verb = unquote(verb)
-
-      quote do
-        put_buffer var!(buffer, Twiml), opening_tag(unquote(current_verb), " /", unquote(options))
+      else
+        quote do
+          put_buffer var!(buffer, Twiml), opening_tag(unquote(current_verb), " /", unquote(string_or_options))
+        end
       end
     end
   end
 
-  @doc "Start an Agent to store the TwiML buffer prior to rendering."
+  @doc """
+  Add an option to the output.
+  """
+  defmacro option(pattern, text, menu_options \\ [], verb_options \\ []) do
+    quote do
+      put_buffer var!(options, Twiml), {unquote(pattern), unquote(menu_options)}
+      say unquote(text), unquote(verb_options)
+    end
+  end
+
+  @doc "Start an Agent to store a given buffer state."
+  @spec start_buffer(list) :: {:ok, pid}
   def start_buffer(state), do: Agent.start_link(fn -> state end)
 
   @doc "Stop a buffer."
+  @spec stop_buffer(pid) :: atom
   def stop_buffer(buff), do: Agent.stop(buff)
 
   @doc "Update the buffer by pushing a new tag onto the beginning."
+  @spec put_buffer(pid, any) :: atom
   def put_buffer(buff, content), do: Agent.update(buff, &[content | &1])
 
+  @doc "Get the current state of a buffer."
+  @spec get_buffer(pid) :: list
+  def get_buffer(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse
+
   @doc "Render the contents of the buffer into a string."
+  @spec render(pid) :: String.t
   def render(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse |> Enum.join
 end

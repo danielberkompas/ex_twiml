@@ -20,6 +20,7 @@ defmodule ExTwiml.Utilities do
       ...> opening_tag "say", " /", option_1: "value"
       "<Say option1=\\"value\\" />"
   """
+  @spec opening_tag(atom, String.t, list) :: String.t
   def opening_tag(tag_name, close, options \\ []) do
     "<#{capitalize(tag_name)}#{xml_attributes(options)}#{close}>"
   end
@@ -33,6 +34,7 @@ defmodule ExTwiml.Utilities do
       ...> closing_tag("say")
       "</Say>"
   """
+  @spec closing_tag(atom) :: String.t
   def closing_tag(tag_name) do
     "</#{capitalize(tag_name)}>"
   end
@@ -48,6 +50,7 @@ defmodule ExTwiml.Utilities do
       ...> capitalize("string")
       "String"
   """
+  @spec capitalize(atom) :: String.t
   def capitalize(atom) do
     String.capitalize to_string(atom)
   end
@@ -64,6 +67,7 @@ defmodule ExTwiml.Utilities do
       ...> xml_attributes([digits: 1, finish_on_key: "#"])
       " digits=\\"1\\" finishOnKey=\\"#\\""
   """
+  @spec xml_attributes(list) :: String.t
   def xml_attributes(attrs) do
     for {key, val} <- attrs, into: "", do: " #{to_camel_case key}=\"#{val}\""
   end
@@ -77,6 +81,7 @@ defmodule ExTwiml.Utilities do
       ...> to_camel_case("finish_on_key")
       "finishOnKey"
   """
+  @spec to_camel_case(String.t) :: String.t
   def to_camel_case(string) do
     to_string(string)
     |> String.split("_")

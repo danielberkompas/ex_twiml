@@ -7,6 +7,10 @@ defmodule ExTwiml.Mixfile do
      version: "1.0.0",
      elixir: "~> 1.0",
      deps: deps,
+     dialyzer: [
+       plt_file: "#{System.get_env("HOME")}/#{plt_filename}",
+       flags: ["--no_native", "-Wno_match", "-Wno_return"]
+     ],
      package: package]
   end
 
@@ -42,5 +46,16 @@ defmodule ExTwiml.Mixfile do
         "Github" => "https://github.com/danielberkompas/ex_twiml"
       }
     ]
+  end
+
+  defp plt_filename do
+    "elixir-#{System.version}_#{otp_release}.plt"
+  end
+
+  defp otp_release do
+    case System.get_env("TRAVIS_OTP_RELEASE") do
+      nil     -> :erlang.system_info(:otp_release)
+      release -> release
+    end
   end
 end

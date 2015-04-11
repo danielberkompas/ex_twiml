@@ -214,17 +214,22 @@ defmodule ExTwiml do
   end
 
   @doc "Start an Agent to store a given buffer state."
+  @spec start_buffer(list) :: {:ok, pid}
   def start_buffer(state), do: Agent.start_link(fn -> state end)
 
   @doc "Stop a buffer."
+  @spec stop_buffer(pid) :: atom
   def stop_buffer(buff), do: Agent.stop(buff)
 
   @doc "Update the buffer by pushing a new tag onto the beginning."
+  @spec put_buffer(pid, any) :: atom
   def put_buffer(buff, content), do: Agent.update(buff, &[content | &1])
 
   @doc "Get the current state of a buffer."
+  @spec get_buffer(pid) :: list
   def get_buffer(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse
 
   @doc "Render the contents of the buffer into a string."
+  @spec render(pid) :: String.t
   def render(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse |> Enum.join
 end

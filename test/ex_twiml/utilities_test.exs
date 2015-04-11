@@ -12,7 +12,7 @@ defmodule ExTwiml.UtilitiesTest do
 
   test ".generate_xml_attributes converts a keyword list into XML attributes" do
     options = [finish_on_key: "#", digits: 1]
-    assert generate_xml_attributes(options) == " finishOnKey=\"#\" digits=\"1\""
+    assert xml_attributes(options) == " finishOnKey=\"#\" digits=\"1\""
   end
 
   test ".to_camel_case converts an underscore string into headless camel case" do

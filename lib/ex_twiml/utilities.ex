@@ -21,7 +21,7 @@ defmodule ExTwiml.Utilities do
       "<Say option1=\\"value\\" />"
   """
   def opening_tag(tag_name, close, options \\ []) do
-    "<#{capitalize(tag_name)}#{generate_xml_attributes(options)}#{close}>"
+    "<#{capitalize(tag_name)}#{xml_attributes(options)}#{close}>"
   end
 
   @doc """
@@ -61,13 +61,11 @@ defmodule ExTwiml.Utilities do
   ## Examples
 
       iex> import ExTwiml.Utilities
-      ...> generate_xml_attributes([digits: 1, finish_on_key: "#"])
+      ...> xml_attributes([digits: 1, finish_on_key: "#"])
       " digits=\\"1\\" finishOnKey=\\"#\\""
   """
-  def generate_xml_attributes(keyword_list) do
-    Enum.reduce keyword_list, "", fn({key, val}, acc) ->
-      acc <> " " <> "#{to_camel_case key}=\"#{val}\""
-    end
+  def xml_attributes(attrs) do
+    for {key, val} <- attrs, into: "", do: " #{to_camel_case key}=\"#{val}\""
   end
 
   @doc """

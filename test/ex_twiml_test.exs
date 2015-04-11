@@ -174,6 +174,24 @@ defmodule ExTwimlTest do
     assert_twiml markup, "<Media>https://demo.twilio.com/owl.png</Media>"
   end
 
+  test "can render with options" do
+    {opts, _twiml} = twiml do
+      option 1, "hello there!", [menu: :other_menu], [voice: "woman"]
+    end
+
+    assert opts == [{1, [menu: :other_menu]}]
+  end
+
+  test ".twiml can include Enum loops" do
+    {opts, _xml} = twiml do
+      Enum.each 1..3, fn(n) ->
+        option n, "Press #{n}"
+      end
+    end
+
+    assert opts == [{1, []}, {2, []}, {3, []}]
+  end
+
   defp assert_twiml(lhs, rhs) do
     assert lhs == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>#{rhs}</Response>"
   end

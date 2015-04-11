@@ -11,7 +11,9 @@ before_script:
   - wget -O $PLT_LOCATION https://raw.github.com/danielberkompas/travis_elixir_plts/master/$PLT_FILENAME
   - mix local.hex --force
   - mix deps.get --only test
-  - dialyzer --no_check_plt --plt $PLT_LOCATION -Wno_match -Wno_return --no_native _build/test/lib/ex_twilio/ebin
+script:
+  - mix test
+  - dialyzer --no_check_plt --plt $PLT_LOCATION -Wno_match -Wno_return --no_native _build/test/lib/ex_twiml/ebin
 after_script:
 - MIX_ENV=docs mix deps.get
 - MIX_ENV=docs mix inch.report

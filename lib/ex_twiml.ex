@@ -187,7 +187,7 @@ defmodule ExTwiml do
     defmacro unquote(verb)(string_or_options, options) do
       current_verb = unquote(verb)
 
-      {expanded, _} = Code.eval_quoted(string_or_options, __CALLER__.vars, __ENV__)
+      {expanded, _} = Code.eval_quoted(string_or_options, Map.get(__CALLER__, :vars), __ENV__)
 
       if is_binary(expanded) do
         quote do

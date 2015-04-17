@@ -1,5 +1,5 @@
 defmodule ExTwimlTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
   import ExTwiml
 
   test "Can render the <Gather> verb" do
@@ -190,6 +190,18 @@ defmodule ExTwimlTest do
     end
 
     assert opts == [{1, []}, {2, []}, {3, []}]
+  end
+
+  test ".twiml can loop through lists of maps" do
+    people = [%{name: "Daniel"}, %{name: "Hunter"}]
+
+    xml = twiml do
+      Enum.each people, fn person ->
+        say "Hello, #{person.name}!"
+      end
+    end
+
+    assert_twiml xml, "<Say>Hello, Daniel!</Say><Say>Hello, Hunter!</Say>"
   end
 
   defp assert_twiml(lhs, rhs) do

@@ -185,21 +185,28 @@ defmodule ExTwiml do
     """
     defmacro unquote(verb)(string \\ [], options \\ [])
     defmacro unquote(verb)(string_or_options, options) do
-      current_verb = unquote(verb)
-
-      {expanded, _} = Code.eval_quoted(string_or_options, Map.get(__CALLER__, :vars), __ENV__)
-
-      if is_binary(expanded) do
-        quote do
-          tag unquote(current_verb), unquote(options) do
-            text unquote(string_or_options)
-          end
-        end
-      else
-        quote do
-          put_buffer var!(buffer, Twiml), opening_tag(unquote(current_verb), " /", unquote(string_or_options))
-        end
+      case string_or_options do
+        string when is_binary(string) ->
+          compile_string_macro(unquote(verb), options, string)
+        {:<<>>, _, _} ->
+          compile_string_macro(unquote(verb), options, string_or_options)
+        _ ->
+          compile_nested_macro(unquote(verb), string_or_options)
       end
+    end
+  end
+
+  defp compile_string_macro(verb, options, string) do
+    quote do
+      tag unquote(verb), unquote(options) do
+        text unquote(string)
+      end
+    end
+  end
+
+  defp compile_nested_macro(verb, options) do
+    quote do
+      put_buffer var!(buffer, Twiml), opening_tag(unquote(verb), " /", unquote(options))
     end
   end
 

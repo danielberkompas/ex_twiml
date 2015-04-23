@@ -183,7 +183,7 @@ defmodule ExTwimlTest do
   end
 
   test ".twiml can include Enum loops" do
-    {opts, _xml} = twiml do
+    {opts, _markup} = twiml do
       Enum.each 1..3, fn(n) ->
         option n, "Press #{n}"
       end
@@ -195,13 +195,22 @@ defmodule ExTwimlTest do
   test ".twiml can loop through lists of maps" do
     people = [%{name: "Daniel"}, %{name: "Hunter"}]
 
-    xml = twiml do
+    markup = twiml do
       Enum.each people, fn person ->
         say "Hello, #{person.name}!"
       end
     end
 
-    assert_twiml xml, "<Say>Hello, Daniel!</Say><Say>Hello, Hunter!</Say>"
+    assert_twiml markup, "<Say>Hello, Daniel!</Say><Say>Hello, Hunter!</Say>"
+  end
+
+  test ".twiml can 'say' a variable that happens to be a string" do
+    some_var = "hello world"
+    markup = twiml do
+      say some_var
+    end
+
+    assert_twiml markup, "<Say>hello world</Say>"
   end
 
   defp assert_twiml(lhs, rhs) do

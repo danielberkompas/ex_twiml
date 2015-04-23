@@ -188,7 +188,7 @@ defmodule ExTwiml do
       case string_or_options do
         string when is_binary(string) ->
           compile_string_macro(unquote(verb), options, string)
-        {:<<>>, _, _} ->
+        {atom, _, _} when is_atom(atom) ->
           compile_string_macro(unquote(verb), options, string_or_options)
         _ ->
           compile_nested_macro(unquote(verb), string_or_options)

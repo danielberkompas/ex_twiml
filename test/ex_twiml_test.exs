@@ -204,6 +204,15 @@ defmodule ExTwimlTest do
     assert_twiml xml, "<Say>Hello, Daniel!</Say><Say>Hello, Hunter!</Say>"
   end
 
+  test ".twiml can 'say' a variable that happens to be a string" do
+    some_var = "hello world"
+    markup = twiml do
+      say some_var
+    end
+
+    assert_twiml markup, "<Say>hello world</Say>"
+  end
+
   defp assert_twiml(lhs, rhs) do
     assert lhs == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>#{rhs}</Response>"
   end

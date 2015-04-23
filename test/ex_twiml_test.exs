@@ -2,7 +2,7 @@ defmodule ExTwimlTest do
   use ExUnit.Case, async: false
   import ExTwiml
 
-  test "Can render the <Gather> verb" do
+  test "can render the <Gather> verb" do
     markup = twiml do
       gather digits: 3 do
         text "Phone Number"
@@ -10,6 +10,16 @@ defmodule ExTwimlTest do
     end
 
     assert_twiml markup, "<Gather digits=\"3\">Phone Number</Gather>"
+  end
+
+  test "can render the <Gather> verb without any options" do
+    markup = twiml do
+      gather do
+        text "Phone Number"
+      end
+    end
+
+    assert_twiml markup, "<Gather>Phone Number</Gather>"
   end
 
   test "can render the <Say> verb" do

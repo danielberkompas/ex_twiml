@@ -135,7 +135,7 @@ defmodule ExTwiml do
           end
         end
     """
-    defmacro unquote(verb)(options, do: inner) do
+    defmacro unquote(verb)(options \\ [], do: inner) do
       current_verb = unquote(verb)
 
       quote do

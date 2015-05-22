@@ -5,8 +5,8 @@ ExTwiml
 [![Inline docs](http://inch-ci.org/github/danielberkompas/ex_twiml.svg?branch=master)](http://inch-ci.org/github/danielberkompas/extwiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
-Elixir! This is the first step toward a comprehensive Twilio integration library
-I'm writing for Elixir, but it can be used entirely on its own.
+Elixir! Built to be used with [Telephonist](https://github.com/danielberkompas/telephonist), 
+but it can be used entirely on its own.
 
 ## Installation
 

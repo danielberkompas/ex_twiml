@@ -1,13 +1,47 @@
 defmodule ExTwiml do
-  import ExTwiml.Utilities
-
   @moduledoc """
   Contains macros to make generating TwiML from Elixir far easier and more 
-  efficient. Just `import` the module and go!
+  efficient. Just `import ExTwiml` and go!
 
   ## Examples
 
-      import Twiml
+  How to generate nested verbs, such as `<Gather>`:
+
+      # Options are passed before "do"
+      gather digits: 1, finish_on_key: "#" do
+        # More verbs here ...
+      end
+
+      # Generates
+      <Gather digits="1" finishOnKey="#"></Gather>
+
+  How to generate simpler verbs, such as `<Say>`:
+
+      # Options are passed as the second argument
+      say "words to say", voice: "woman"
+
+      # Generates
+      <Say voice="woman">words to say</Say>
+
+  How to generate command verbs, like `<Leave>` or `<Pause>`:
+      
+      # If the verb has no attributes, just write the name
+      # of the verb:
+      leave
+
+      # Generates
+      <Leave />
+
+      # If the verb has attributes, like <Pause>, write them
+      # after the name of the verb:
+      pause length: 5
+
+      # Generates
+      <Pause length="5" />
+
+  A complete example:
+
+      import ExTwiml
 
       twiml do
         play "/assets/welcome.mp3"
@@ -31,15 +65,29 @@ defmodule ExTwiml do
   You'd then need to render this string to the browser.
   """
 
-  @nested_verbs [ :gather, :dial, :message ]
+  import ExTwiml.Utilities
 
-  @verbs [
+  @verbs [ 
+    # Nested
+    :gather, :dial, :message,    
+
+    # Non-nested
     :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue, 
     :leave, :hangup, :reject, :pause, :record, :redirect, :body, :media
   ]
 
   @doc """
-  Start creating a TwiML document.
+  Start creating a TwiML document. Returns the rendered TwiML as a string.
+  See the `ExTwiml` documentation to see how to call TwiML verbs from within
+  the `twiml/1` macro.
+
+  ## Example
+
+      iex> import ExTwiml
+      ...> twiml do
+      ...>   say "Hello World"
+      ...> end
+      "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><Response><Say>Hello World</Say></Response>"
   """
   defmacro twiml(do: block) do
     quote do
@@ -55,7 +103,11 @@ defmodule ExTwiml do
 
       # Wrap the whole block in a <Response> tag
       tag :response do
-        unquote(block)
+        # Postwalk the AST, expanding all of the TwiML verbs into proper
+        # `tag` and `text` macros. This gives the impression that there
+        # is a macro for each verb, when in fact it all expands to only
+        # two macros.
+        unquote(Macro.postwalk(block, &postwalk/1))
       end
 
       xml  = render(var!(buffer, Twiml))      # Convert buffer to string
@@ -98,112 +150,6 @@ defmodule ExTwiml do
     end
   end
 
-  # Generates a macro for each verb that allows nesting of other verbs beneath
-  # it. These macros can be used like this:
-  #
-  #   dial from: "1112223333" do
-  #     number "2223334444"
-  #     number "3334445555"
-  #   end
-  #
-  # Which will produce this Twiml:
-  #
-  #   <Dial from="1112223333">
-  #     <Number>2223334444</Number>
-  #     <Number>3334445555</Number>
-  #   </Dial>
-  Enum.each @nested_verbs, fn verb ->
-    @doc """
-    Implements the `<#{capitalize verb}>` verb. Other verbs can be nested
-    under this verb, as shown in the examples.
-
-    See Twilio's official docs for the <#{capitalize verb}> verb here:
-
-    <https://www.twilio.com/docs/api/twiml/#{verb}>
-
-    ## Examples
-
-        twiml do
-          #{verb} do
-            number "1112223333"
-          end
-        end
-    """
-    defmacro unquote(verb)(options \\ [], do: inner) do
-      current_verb = unquote(verb)
-
-      quote do
-        tag unquote(current_verb), unquote(options) do
-          unquote(inner)
-        end
-      end
-    end
-  end
-
-  # Generates macros for each verb that doesn't support nesting.
-  # 
-  # Two macros are defined for each verb. The first allows the verb to be called
-  # with a string argument, like so:
-  # 
-  #   verb "Some string", option: "value"
-  #
-  # Producing the following Twiml:
-  #
-  #   <Verb option="value">Some string</Verb>
-  #
-  # The second macro allows the verb to be called in this form:
-  #
-  #   verb option: "value"
-  #
-  # This macro will produce a self-closing XML tag, including the attributes.
-  #
-  #   <Verb option="value" />
-  Enum.each @verbs, fn verb ->
-    @doc """
-    Implements the `<#{capitalize verb}>` verb. No other verbs can be nested 
-    under this verb.
-
-    See Twilio's official docs for the <#{capitalize verb}> verb here:
-
-    <https://www.twilio.com/docs/api/twiml/#{verb}>
-
-    ## Examples
-
-        twiml do
-          #{verb} "Some text here", option1: "val", option2: "val"
-        end
-
-        twiml do
-          #{verb} option1: "val", option2: "val"
-        end
-    """
-    defmacro unquote(verb)(string \\ [], options \\ [])
-    defmacro unquote(verb)(string_or_options, options) do
-      case string_or_options do
-        string when is_binary(string) ->
-          compile_string_macro(unquote(verb), options, string)
-        {atom, _, _} when is_atom(atom) ->
-          compile_string_macro(unquote(verb), options, string_or_options)
-        _ ->
-          compile_nested_macro(unquote(verb), string_or_options)
-      end
-    end
-  end
-
-  defp compile_string_macro(verb, options, string) do
-    quote do
-      tag unquote(verb), unquote(options) do
-        text unquote(string)
-      end
-    end
-  end
-
-  defp compile_nested_macro(verb, options) do
-    quote do
-      put_buffer var!(buffer, Twiml), opening_tag(unquote(verb), " /", unquote(options))
-    end
-  end
-
   @doc "Start an Agent to store a given buffer state."
   @spec start_buffer(list) :: {:ok, pid}
   def start_buffer(state), do: Agent.start_link(fn -> state end)
@@ -223,4 +169,74 @@ defmodule ExTwiml do
   @doc "Render the contents of the buffer into a string."
   @spec render(pid) :: String.t
   def render(buff), do: Agent.get(buff, &(&1)) |> Enum.reverse |> Enum.join
+
+  ##
+  # Private API
+  ##
+
+  # {:text, [], ["Hello World"]}
+  defp postwalk({:text, _meta, [string]}) do
+    # Just add the text to the buffer. Nothing else needed.
+    quote do: put_buffer(var!(buffer, Twiml), to_string(unquote(string)))
+  end
+
+  # {:gather, [], [[do: inner]]}
+  defp postwalk({verb, _meta, [[do: inner]]}) when verb in @verbs do
+    compile_nested(verb, [], inner)
+  end
+
+  # {:gather, [], [finish_on_key: "#", [do: inner]]}
+  defp postwalk({verb, _meta, [options, [do: inner]]}) when verb in @verbs do
+    compile_nested(verb, options, inner)
+  end
+
+  # {:say, [], ["Hello World", [voice: "woman"]}
+  defp postwalk({verb, _meta, [string, options]}) when verb in @verbs and is_list(options) do
+    compile_simple(verb, string, options)
+  end
+
+  # {:pause, [], [[length: 5]]}
+  defp postwalk({verb, _meta, [options]}) when verb in @verbs and is_list(options) do
+    compile_empty(verb, options)
+  end
+
+  # {:say, [], ["Hello World"]}
+  # {:say, [], ["Hello #{var}"]} (String interpolation)
+  defp postwalk({verb, _meta, [string]}) when verb in @verbs do
+    compile_simple(verb, string)
+  end
+
+  # {:leave, [], Elixir}
+  defp postwalk({verb, _meta, _args}) when verb in @verbs do
+    compile_empty(verb)
+  end
+
+  # Don't modify any other ASTs.
+  defp postwalk(ast), do: ast
+
+  # For nested verbs, such as <Gather>
+  defp compile_nested(verb, options, inner) do
+    quote do
+      tag unquote(verb), unquote(options) do
+        unquote(inner)
+      end
+    end
+  end
+
+  # For simple verbs, such as <Say>
+  defp compile_simple(verb, string, options \\ []) do
+    quote do
+      tag unquote(verb), unquote(options) do
+        text unquote(string)
+      end
+    end
+  end
+
+  # For verbs without content, like <Leave> or <Pause>
+  defp compile_empty(verb, options \\ []) do
+    quote do
+      # Render only a single tag, with options
+      put_buffer var!(buffer, Twiml), opening_tag(unquote(verb), " /", unquote(options))
+    end
+  end
 end

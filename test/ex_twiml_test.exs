@@ -2,6 +2,8 @@ defmodule ExTwimlTest do
   use ExUnit.Case, async: false
   import ExTwiml
 
+  doctest ExTwiml
+
   test "can render the <Gather> verb" do
     markup = twiml do
       gather digits: 3 do
@@ -213,6 +215,15 @@ defmodule ExTwimlTest do
     end
 
     assert_twiml markup, "<Say>hello world</Say>"
+  end
+
+  test ".twiml can 'say' an integer variable" do
+    integer = 123
+    markup = twiml do
+      say integer
+    end
+
+    assert_twiml markup, "<Say>123</Say>"
   end
 
   defp assert_twiml(lhs, rhs) do

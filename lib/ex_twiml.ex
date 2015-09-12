@@ -52,22 +52,16 @@ defmodule ExTwiml do
       # inserted by other macros. Finally, all the fragments are joined
       # together in a string.
       {:ok, var!(buffer, Twiml)}  = start_buffer([header])
-      {:ok, var!(options, Twiml)} = start_buffer([])
 
       # Wrap the whole block in a <Response> tag
       tag :response do
         unquote(block)
       end
 
-      xml  = render(var!(buffer, Twiml))   # Convert buffer to string
-      opts = get_buffer var!(options, Twiml)
+      xml  = render(var!(buffer, Twiml))      # Convert buffer to string
       :ok  = stop_buffer(var!(buffer, Twiml)) # Kill the Agent
 
-      if length(opts) > 0 do
-        {opts, xml}
-      else
-        xml
-      end
+      xml # Return our pretty TwiML!
     end
   end
 
@@ -207,16 +201,6 @@ defmodule ExTwiml do
   defp compile_nested_macro(verb, options) do
     quote do
       put_buffer var!(buffer, Twiml), opening_tag(unquote(verb), " /", unquote(options))
-    end
-  end
-
-  @doc """
-  Add an option to the output.
-  """
-  defmacro option(pattern, text, menu_options \\ [], verb_options \\ []) do
-    quote do
-      put_buffer var!(options, Twiml), {unquote(pattern), unquote(menu_options)}
-      say unquote(text), unquote(verb_options)
     end
   end
 

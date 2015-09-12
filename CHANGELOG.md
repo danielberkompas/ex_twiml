@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/danielberkompas/ex_twiml/tree/HEAD)
-
-[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v1.1.3...HEAD)
+## [v2.0.0](https://github.com/danielberkompas/ex_twiml/tree/v2.0.0) (2015-09-12)
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v1.1.3...v2.0.0)
 
 **Closed issues:**
 

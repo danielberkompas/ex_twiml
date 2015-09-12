@@ -32,7 +32,7 @@ defmodule ExTwiml.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:ex_doc, "~> 0.7"},
+      {:ex_doc, "~> 0.7", only: :docs},
       {:inch_ex, only: :docs}
     ]
   end

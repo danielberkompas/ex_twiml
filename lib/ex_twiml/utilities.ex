@@ -1,42 +1,39 @@
 defmodule ExTwiml.Utilities do
   @moduledoc """
   A grab bag of helpful functions used to generate XML.
-
-  - `opening_tag/3`: Generate an XML open tag.
-  - `closing_tag/1`: Generate an XML close tag.
-  - `generate_xml_attributes/1`: Generate a list of XML attributes.
-  - `capitalize/1`: Capitalize a string or atom.
-  - `to_camel_case/1`: Convert a string or atom to headless camelCase.
   """
 
+  import String, only: [downcase: 1]
+
   @doc """
-  Generates an opening XML tag.
+  Generates an XML tag.
 
   ## Examples
 
-      iex> import ExTwiml.Utilities
-      ...> opening_tag "say", "", option_1: "value"
-      "<Say option1=\\"value\\">"
-      ...> opening_tag "say", " /", option_1: "value"
-      "<Say option1=\\"value\\" />"
-  """
-  @spec opening_tag(atom, String.t, list) :: String.t
-  def opening_tag(tag_name, close, options \\ []) do
-    "<#{capitalize(tag_name)}#{xml_attributes(options)}#{close}>"
-  end
+      iex> ExTwiml.Utilities.create_tag(:opening, :say, [voice: "woman"])
+      "<Say voice=\\"woman\\">"
 
-  @doc """
-  Generates a closing XML tag.
+      iex> ExTwiml.Utilities.create_tag(:self_closed, :pause, [length: 5])
+      "<Pause length=\\"5\\" />"
 
-  ## Examples
-
-      iex> import ExTwiml.Utilities
-      ...> closing_tag("say")
+      iex> ExTwiml.Utilities.create_tag(:closing, :say)
       "</Say>"
   """
-  @spec closing_tag(atom) :: String.t
-  def closing_tag(tag_name) do
-    "</#{capitalize(tag_name)}>"
+  @spec create_tag(atom, atom, Keyword.t) :: String.t
+  def create_tag(type, name, options \\ []) do
+    do_create_tag(type, capitalize(name), xml_attributes(options))
+  end
+
+  defp do_create_tag(:self_closed, name, attributes) do
+    "<" <> name <> attributes <> " />"
+  end
+
+  defp do_create_tag(:opening, name, attributes) do
+    "<" <> name <> attributes <> ">"
+  end
+
+  defp do_create_tag(:closing, name, _attributes) do
+    "</" <> name <> ">"
   end
 
   @doc """
@@ -44,10 +41,10 @@ defmodule ExTwiml.Utilities do
 
   ## Examples
 
-      iex> import ExTwiml.Utilities
-      ...> capitalize(:atom)
+      iex> ExTwiml.Utilities.capitalize(:atom)
       "Atom"
-      ...> capitalize("string")
+
+      iex> ExTwiml.Utilities.capitalize("string")
       "String"
   """
   @spec capitalize(atom) :: String.t
@@ -59,17 +56,18 @@ defmodule ExTwiml.Utilities do
   Generate a list of HTML attributes from a keyword list. Keys will be converted
   to headless camelCase.
 
-  See the `to_camel_case/1` function for more details.
+  See the `camelize/1` function for more details.
 
   ## Examples
 
-      iex> import ExTwiml.Utilities
-      ...> xml_attributes([digits: 1, finish_on_key: "#"])
+      iex> ExTwiml.Utilities.xml_attributes([digits: 1, finish_on_key: "#"])
       " digits=\\"1\\" finishOnKey=\\"#\\""
   """
   @spec xml_attributes(list) :: String.t
   def xml_attributes(attrs) do
-    for {key, val} <- attrs, into: "", do: " #{to_camel_case key}=\"#{val}\""
+    for {key, val} <- attrs,
+        into: "",
+        do: " #{camelize(key)}=\"#{val}\""
   end
 
   @doc """
@@ -77,21 +75,25 @@ defmodule ExTwiml.Utilities do
 
   ## Examples
 
-      iex> import ExTwiml.Utilities
-      ...> to_camel_case("finish_on_key")
+      ...> ExTwiml.Utilities.camelize("finish_on_key")
       "finishOnKey"
   """
-  @spec to_camel_case(String.t) :: String.t
-  def to_camel_case(string) do
-    to_string(string)
-    |> String.split("_")
-    |> Enum.with_index
-    |> Enum.map(fn {str, i} ->
-      case i do
-        0 -> str
-        _ -> String.capitalize(str)
-      end
-    end)
-    |> Enum.join
+  @spec camelize(String.t) :: String.t
+  def camelize(string) do
+    string = to_string(string)
+    parts = String.split(string, "_", parts: 2)
+    do_camelize(parts, string)
+  end
+
+  defp do_camelize([first], original) when first == original do
+    original
+  end
+
+  defp do_camelize([first], _) do
+    downcase(first)
+  end
+
+  defp do_camelize([first, rest], _) do
+    downcase(first) <> Mix.Utils.camelize(rest)
   end
 end

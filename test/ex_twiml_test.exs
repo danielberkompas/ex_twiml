@@ -2,6 +2,8 @@ defmodule ExTwimlTest do
   use ExUnit.Case, async: false
   import ExTwiml
 
+  doctest ExTwiml
+
   test "can render the <Gather> verb" do
     markup = twiml do
       gather digits: 3 do
@@ -184,22 +186,14 @@ defmodule ExTwimlTest do
     assert_twiml markup, "<Media>https://demo.twilio.com/owl.png</Media>"
   end
 
-  test "can render with options" do
-    {opts, _twiml} = twiml do
-      option 1, "hello there!", [menu: :other_menu], [voice: "woman"]
-    end
-
-    assert opts == [{1, [menu: :other_menu]}]
-  end
-
   test ".twiml can include Enum loops" do
-    {opts, _markup} = twiml do
+    markup = twiml do
       Enum.each 1..3, fn(n) ->
-        option n, "Press #{n}"
+        say "Press #{n}"
       end
     end
 
-    assert opts == [{1, []}, {2, []}, {3, []}]
+    assert_twiml markup, "<Say>Press 1</Say><Say>Press 2</Say><Say>Press 3</Say>"
   end
 
   test ".twiml can loop through lists of maps" do
@@ -221,6 +215,15 @@ defmodule ExTwimlTest do
     end
 
     assert_twiml markup, "<Say>hello world</Say>"
+  end
+
+  test ".twiml can 'say' an integer variable" do
+    integer = 123
+    markup = twiml do
+      say integer
+    end
+
+    assert_twiml markup, "<Say>123</Say>"
   end
 
   defp assert_twiml(lhs, rhs) do

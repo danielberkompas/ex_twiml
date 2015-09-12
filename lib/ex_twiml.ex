@@ -133,9 +133,9 @@ defmodule ExTwiml do
   """
   defmacro tag(name, options \\ [], do: inner) do
     quote do
-      put_buffer var!(buffer, Twiml), opening_tag(unquote(name), "", unquote(options))
+      put_buffer var!(buffer, Twiml), create_tag(:opening, unquote(name), unquote(options))
       unquote(inner)
-      put_buffer var!(buffer, Twiml), closing_tag(unquote(name))
+      put_buffer var!(buffer, Twiml), create_tag(:closing, unquote(name))
     end
   end
 
@@ -236,7 +236,7 @@ defmodule ExTwiml do
   defp compile_empty(verb, options \\ []) do
     quote do
       # Render only a single tag, with options
-      put_buffer var!(buffer, Twiml), opening_tag(unquote(verb), " /", unquote(options))
+      put_buffer var!(buffer, Twiml), create_tag(:self_closed, unquote(verb), unquote(options))
     end
   end
 end

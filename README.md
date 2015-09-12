@@ -123,7 +123,7 @@ To maximize compatibility with future versions of the TwiML spec, ExTwiml
 they are supported by Twilio. You'll need to do this yourself.
 
 ### Unsupported Verbs?
-If the Twilio API adds a verb and I haven't yet created a macro for it, you can do
+If the Twilio API adds a verb and I haven't yet added support for it, you can do
 two things:
 
 1. Submit a PR to add it

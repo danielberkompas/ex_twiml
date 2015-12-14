@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/danielberkompas/ex_twiml/tree/HEAD)
+
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.0.0...HEAD)
+
+**Closed issues:**
+
+- Dynamically calling verbs. [\#10](https://github.com/danielberkompas/ex_twiml/issues/10)
+- Fix Build Badge & Travis Build [\#6](https://github.com/danielberkompas/ex_twiml/issues/6)
+
+**Merged pull requests:**
+
+- Find reserved name in functions with multiple args [\#12](https://github.com/danielberkompas/ex_twiml/pull/12) ([danielberkompas](https://github.com/danielberkompas))
+- Warn about reserved names [\#11](https://github.com/danielberkompas/ex_twiml/pull/11) ([danielberkompas](https://github.com/danielberkompas))
+
 ## [v2.0.0](https://github.com/danielberkompas/ex_twiml/tree/v2.0.0) (2015-09-12)
 [Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v1.1.3...v2.0.0)
 

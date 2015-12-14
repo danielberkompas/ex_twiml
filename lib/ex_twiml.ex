@@ -67,6 +67,8 @@ defmodule ExTwiml do
 
   import ExTwiml.Utilities
 
+  alias ExTwiml.ReservedNameError
+
   @verbs [ 
     # Nested
     :gather, :dial, :message,    
@@ -99,7 +101,7 @@ defmodule ExTwiml do
       # The buffer's state is a list of XML fragments. New fragments are 
       # inserted by other macros. Finally, all the fragments are joined
       # together in a string.
-      {:ok, var!(buffer, Twiml)}  = start_buffer([header])
+      {:ok, var!(buffer, Twiml)} = start_buffer([header])
 
       # Wrap the whole block in a <Response> tag
       tag :response do
@@ -107,7 +109,9 @@ defmodule ExTwiml do
         # `tag` and `text` macros. This gives the impression that there
         # is a macro for each verb, when in fact it all expands to only
         # two macros.
-        unquote(Macro.postwalk(block, &postwalk/1))
+        unquote(block
+                |> Macro.prewalk(&prewalk(&1, __CALLER__.file))
+                |> Macro.postwalk(&postwalk/1))
       end
 
       xml  = render(var!(buffer, Twiml))      # Convert buffer to string
@@ -174,6 +178,14 @@ defmodule ExTwiml do
   # Private API
   ##
 
+  # Check function definitions for reserved variable names
+  defp prewalk({:fn, _, [{:-> , _, [[vars], _]}]} = ast, file_name) do
+    assert_no_verbs!(vars, file_name)
+    ast
+  end
+
+  defp prewalk(ast, _file_name), do: ast
+
   # {:text, [], ["Hello World"]}
   defp postwalk({:text, _meta, [string]}) do
     # Just add the text to the buffer. Nothing else needed.
@@ -239,4 +251,17 @@ defmodule ExTwiml do
       put_buffer var!(buffer, Twiml), create_tag(:self_closed, unquote(verb), unquote(options))
     end
   end
+
+  defp assert_no_verbs!({name, _, _} = var, file_name)
+  when is_atom(name) and name in @verbs do
+    raise ReservedNameError, [var, file_name]
+  end
+
+  defp assert_no_verbs!(vars, file_name) when is_tuple(elem(vars, 0)) do
+    vars
+    |> Tuple.to_list
+    |> Enum.each(&assert_no_verbs!(&1, file_name))
+  end
+
+  defp assert_no_verbs!(vars, _file_name), do: vars
 end

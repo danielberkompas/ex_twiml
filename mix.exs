@@ -40,7 +40,7 @@ defmodule ExTwiml.Mixfile do
   defp package do
     [
       files: ["lib", "mix.exs", "README.md", "CHANGELOG.md", "SIGNED.md", "LICENSE"],
-      contributors: ["Daniel Berkompas"],
+      maintainers: ["Daniel Berkompas"],
       licenses: ["MIT"],
       links: %{
         "Github" => "https://github.com/danielberkompas/ex_twiml"

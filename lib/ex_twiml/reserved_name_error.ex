@@ -17,6 +17,7 @@ defmodule ExTwiml.ReservedNameError do
   defexception [:message]
 
   @doc false
+  @spec exception(list) :: %__MODULE__{}
   def exception([{name, context, _}, file_name]) do
     file_name = Path.relative_to_cwd(file_name)
     name = to_string(name)

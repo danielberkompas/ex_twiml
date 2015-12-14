@@ -1,6 +1,6 @@
 defmodule ExTwiml do
   @moduledoc """
-  Contains macros to make generating TwiML from Elixir far easier and more 
+  Contains macros to make generating TwiML from Elixir far easier and more
   efficient. Just `import ExTwiml` and go!
 
   ## Examples
@@ -24,7 +24,7 @@ defmodule ExTwiml do
       <Say voice="woman">words to say</Say>
 
   How to generate command verbs, like `<Leave>` or `<Pause>`:
-      
+
       # If the verb has no attributes, just write the name
       # of the verb:
       leave
@@ -69,12 +69,12 @@ defmodule ExTwiml do
 
   alias ExTwiml.ReservedNameError
 
-  @verbs [ 
+  @verbs [
     # Nested
-    :gather, :dial, :message,    
+    :gather, :dial, :message,
 
     # Non-nested
-    :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue, 
+    :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue,
     :leave, :hangup, :reject, :pause, :record, :redirect, :body, :media
   ]
 

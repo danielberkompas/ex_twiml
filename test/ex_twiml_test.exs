@@ -1,6 +1,9 @@
 defmodule ExTwimlTest do
   use ExUnit.Case, async: false
+
   import ExTwiml
+
+  alias ExTwiml.ReservedNameError
 
   doctest ExTwiml
 
@@ -224,6 +227,21 @@ defmodule ExTwimlTest do
     end
 
     assert_twiml markup, "<Say>123</Say>"
+  end
+
+  test ".twiml warns of reserved variable names" do
+    ast = quote do
+      twiml do
+        Enum.each [1, 2], fn(number) ->
+          say "#{number}"
+        end
+      end
+    end
+
+    assert_raise ReservedNameError, fn ->
+      # Simulate compiling the macro
+      Macro.expand(ast, __ENV__)
+    end
   end
 
   defp assert_twiml(lhs, rhs) do

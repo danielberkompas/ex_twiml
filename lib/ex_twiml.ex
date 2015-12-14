@@ -95,10 +95,10 @@ defmodule ExTwiml do
     quote do
       header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 
-      # Create an Agent to store the buffer results, using var! to allow us to 
+      # Create an Agent to store the buffer results, using var! to allow us to
       # continue to be able to update the buffer through multiple macros.
-      # 
-      # The buffer's state is a list of XML fragments. New fragments are 
+      #
+      # The buffer's state is a list of XML fragments. New fragments are
       # inserted by other macros. Finally, all the fragments are joined
       # together in a string.
       {:ok, var!(buffer, Twiml)} = start_buffer([header])
@@ -179,7 +179,7 @@ defmodule ExTwiml do
   ##
 
   # Check function definitions for reserved variable names
-  defp prewalk({:fn, _, [{:-> , _, [[vars], _]}]} = ast, file_name) do
+  defp prewalk({:fn, _, [{:->, _, [vars, _]}]} = ast, file_name) do
     assert_no_verbs!(vars, file_name)
     ast
   end
@@ -252,16 +252,16 @@ defmodule ExTwiml do
     end
   end
 
+  defp assert_no_verbs!(vars, file_name) when is_list(vars) do
+    Enum.each(vars, &assert_no_verbs!(&1, file_name))
+  end
+
   defp assert_no_verbs!({name, _, _} = var, file_name)
   when is_atom(name) and name in @verbs do
     raise ReservedNameError, [var, file_name]
   end
 
-  defp assert_no_verbs!(vars, file_name) when is_tuple(elem(vars, 0)) do
+  defp assert_no_verbs!(vars, _file_name) do
     vars
-    |> Tuple.to_list
-    |> Enum.each(&assert_no_verbs!(&1, file_name))
   end
-
-  defp assert_no_verbs!(vars, _file_name), do: vars
 end

@@ -232,7 +232,7 @@ defmodule ExTwimlTest do
   test ".twiml warns of reserved variable names" do
     ast = quote do
       twiml do
-        Enum.each [1, 2], fn(number) ->
+        Enum.each [1, 2], fn(number, text) ->
           say "#{number}"
         end
       end

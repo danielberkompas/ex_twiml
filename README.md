@@ -15,7 +15,7 @@ dependencies in `mix.exs`.
 
 ```elixir
 defp deps
-  [{:ex_twiml, "~> 2.0.1"}]
+  [{:ex_twiml, "~> 2.1.0"}]
 end
 ```
 

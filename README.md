@@ -140,26 +140,6 @@ following verbs and nouns:
     - [Media](https://www.twilio.com/docs/api/2010-04-01/twiml/media)
 - [Redirect](https://www.twilio.com/docs/api/2010-04-01/twiml/redirect)
 
-Supported verbs can be called in three forms:
-
-```elixir
-# Verbs that support nesting, like <Gather> and <Dial>:
-verb option_1: "value", option_2: "value" do
-    # Nested verbs here
-end
-# => "<Verb option1="value" option2="value">Nested verbs here</Verb>":
-
-# Verbs that don't support nesting, like <Say>
-twiml do
-  verb "Inner text", option_1: "value", option_2: "value"
-end
-# => "<Verb option1="value" option2="value">Inner text</Verb>"
-
-# Verbs that have no inner content, like <Reject>:
-reject reason: "busy"
-# => "<Reject reason="busy" />"
-```
-
 To maximize compatibility with future versions of the TwiML spec, ExTwiml
 **does not** validate the attributes passed to the various verbs to ensure that
 they are supported by Twilio. You'll need to do this yourself.

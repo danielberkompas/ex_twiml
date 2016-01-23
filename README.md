@@ -27,6 +27,15 @@ defp deps
 end
 ```
 
+Add it to your application list in `mix.exs`:
+
+```diff
+def application do
+  [mod: {YourApp, []},
++   applications: [:ex_twiml]]
+end
+```
+
 Then run `mix deps.get`, and ExTwiml will be installed.
 
 ## Usage

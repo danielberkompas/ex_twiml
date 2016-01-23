@@ -71,6 +71,48 @@ be a binary in this format:
 The `twiml` macro simply returns a binary (or string), so you're not limited to
 the pattern above. Just use `twiml` wherever you need a TwiML string.
 
+## Configuration
+
+You can configure default options for verbs. For example, suppose you wanted all
+`<Say>` verbs to use the "Alice" voice, and all `<Gather>` verbs to have the
+method "GET".
+
+Simply add this code to your `config/config.exs`:
+
+```elixir
+config :ex_twiml, :defaults,
+  say: [voice: "alice"],
+  gather: [method: "GET"]
+```
+
+Then this code:
+
+```elixir
+twiml do
+  gather do
+    say "Hello"
+  end
+end
+```
+
+Will result in this TwiML:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Gather method="GET">
+    <Say voice="alice">Hello</Say>
+  </Gather>
+</Response>
+```
+
+Defaults can be overridden:
+
+```elixir
+gather method: "POST"
+say "Hello", voice: "woman"
+```
+
 ## Supported Verbs and Nouns
 See the [Twilio Documentation](https://www.twilio.com/docs/api/twiml) for a
 complete list of verbs supported by Twilio. ExTwiml has built in macros for the

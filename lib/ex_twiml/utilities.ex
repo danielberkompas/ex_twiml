@@ -21,6 +21,7 @@ defmodule ExTwiml.Utilities do
   """
   @spec create_tag(atom, atom, Keyword.t) :: String.t
   def create_tag(type, name, options \\ []) do
+    options = Dict.merge(defaults(name), options)
     do_create_tag(type, capitalize(name), xml_attributes(options))
   end
 
@@ -34,6 +35,10 @@ defmodule ExTwiml.Utilities do
 
   defp do_create_tag(:closing, name, _attributes) do
     "</" <> name <> ">"
+  end
+
+  defp defaults(name) do
+    Application.get_env(:ex_twiml, :defaults, [])[name] || []
   end
 
   @doc """

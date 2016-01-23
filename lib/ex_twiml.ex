@@ -75,8 +75,10 @@ defmodule ExTwiml do
 
     # Non-nested
     :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue,
-    :leave, :hangup, :reject, :pause, :record, :redirect, :body, :media
+    :redirect, :body, :media
   ]
+
+  @simple_verbs [:leave, :hangup, :reject, :pause, :record]
 
   @doc """
   Start creating a TwiML document. Returns the rendered TwiML as a string.
@@ -203,13 +205,8 @@ defmodule ExTwiml do
   end
 
   # {:say, [], ["Hello World", [voice: "woman"]}
-  defp postwalk({verb, _meta, [string, options]}) when verb in @verbs and is_list(options) do
+  defp postwalk({verb, _meta, [string, options]}) when verb in @verbs do
     compile_simple(verb, string, options)
-  end
-
-  # {:pause, [], [[length: 5]]}
-  defp postwalk({verb, _meta, [options]}) when verb in @verbs and is_list(options) do
-    compile_empty(verb, options)
   end
 
   # {:say, [], ["Hello World"]}
@@ -218,8 +215,13 @@ defmodule ExTwiml do
     compile_simple(verb, string)
   end
 
+  # {:pause, [], [[length: 5]]}
+  defp postwalk({verb, _meta, [options]}) when verb in @simple_verbs do
+    compile_empty(verb, options)
+  end
+
   # {:leave, [], Elixir}
-  defp postwalk({verb, _meta, _args}) when verb in @verbs do
+  defp postwalk({verb, _meta, _args}) when verb in @simple_verbs do
     compile_empty(verb)
   end
 

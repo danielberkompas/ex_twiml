@@ -229,6 +229,35 @@ defmodule ExTwimlTest do
     assert_twiml markup, "<Say>123</Say>"
   end
 
+  test ".twiml simple verbs can take options as a variable" do
+    options = [voice: "alice"]
+    markup = twiml do
+      say "I'm Alice", options
+    end
+
+    assert_twiml markup, "<Say voice=\"alice\">I'm Alice</Say>"
+  end
+
+  test ".twiml self-closing verbs can take options as a variable" do
+    options = [length: 31]
+    markup = twiml do
+      pause options
+    end
+
+    assert_twiml markup, "<Pause length=\"31\" />"
+  end
+
+  test ".twiml nested verbs can take options as a variable" do
+    options = [method: "GET"]
+    markup = twiml do
+      gather options do
+        say "Hi"
+      end
+    end
+
+    assert_twiml markup, "<Gather method=\"GET\"><Say>Hi</Say></Gather>"
+  end
+
   test ".twiml warns of reserved variable names" do
     ast = quote do
       twiml do

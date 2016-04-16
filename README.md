@@ -3,6 +3,7 @@ ExTwiml
 [![Build Status](https://travis-ci.org/danielberkompas/ex_twiml.svg)](https://travis-ci.org/danielberkompas/ex_twiml)
 [![Hex Version](http://img.shields.io/hexpm/v/ex_twiml.svg)](https://hex.pm/packages/ex_twiml)
 [![Inline docs](http://inch-ci.org/github/danielberkompas/ex_twiml.svg?branch=master)](http://inch-ci.org/github/danielberkompas/extwiml)
+[![Deps Status](https://beta.hexfaktor.org/badge/all/github/danielberkompas/ex_twiml.svg)](https://beta.hexfaktor.org/github/danielberkompas/ex_twiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
 Elixir! Built to be used with [Telephonist](https://github.com/danielberkompas/telephonist), 

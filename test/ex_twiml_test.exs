@@ -80,7 +80,7 @@ defmodule ExTwimlTest do
   test "can render the <Sip> verb" do
     markup = twiml do
       sip "sip:test@example.com", username: "admin", password: "123"
-    end 
+    end
 
     assert_twiml markup, "<Sip username=\"admin\" password=\"123\">sip:test@example.com</Sip>"
   end
@@ -116,6 +116,24 @@ defmodule ExTwimlTest do
     end
 
     assert_twiml markup, "<Enqueue waitUrl=\"wait-music.xml\">support</Enqueue>"
+  end
+
+  test "can render the <Task> verb" do
+    markup = twiml do
+      task ~s({"selected_language": "it"})
+    end
+
+    assert_twiml markup, ~s(<Task>{"selected_language": "it"}</Task>)
+  end
+
+  test "can render the <Task> verb nested inside an <Enqueue> verb" do
+    markup = twiml do
+      enqueue do
+        task ~s({"selected_language": "it"})
+      end
+    end
+
+    assert_twiml markup, ~s(<Enqueue><Task>{"selected_language": "it"}</Task></Enqueue>)
   end
 
   test "can render the <Leave> verb" do

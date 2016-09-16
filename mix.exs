@@ -4,7 +4,7 @@ defmodule ExTwiml.Mixfile do
   def project do
     [app: :ex_twiml,
      description: "Generate TwiML with Elixir",
-     version: "2.1.1",
+     version: "2.1.2",
      elixir: "~> 1.0",
      deps: deps,
      dialyzer: [

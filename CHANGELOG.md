@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/danielberkompas/ex_twiml/tree/HEAD)
+
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.1.0...HEAD)
+
+**Closed issues:**
+
+- consider validating requests are from twilio [\#15](https://github.com/danielberkompas/ex_twiml/issues/15)
+
+**Merged pull requests:**
+
+- task verb and tests [\#16](https://github.com/danielberkompas/ex_twiml/pull/16) ([matteosister](https://github.com/matteosister))
+
 ## [v2.1.0](https://github.com/danielberkompas/ex_twiml/tree/v2.1.0) (2016-01-23)
 [Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.0.1...v2.1.0)
 

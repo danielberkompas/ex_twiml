@@ -1,4 +1,4 @@
-ExTwiml 
+ExTwiml
 ===================
 [![Build Status](https://travis-ci.org/danielberkompas/ex_twiml.svg)](https://travis-ci.org/danielberkompas/ex_twiml)
 [![Hex Version](http://img.shields.io/hexpm/v/ex_twiml.svg)](https://hex.pm/packages/ex_twiml)
@@ -6,17 +6,17 @@ ExTwiml
 [![Deps Status](https://beta.hexfaktor.org/badge/all/github/danielberkompas/ex_twiml.svg)](https://beta.hexfaktor.org/github/danielberkompas/ex_twiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
-Elixir! Built to be used with [Telephonist](https://github.com/danielberkompas/telephonist), 
+Elixir! Built to be used with [Telephonist](https://github.com/danielberkompas/telephonist),
 but it can be used entirely on its own.
 
 ## Installation
 
-ExTwiml can be installed through mix as a hex package. First, update your 
+ExTwiml can be installed through mix as a hex package. First, update your
 dependencies in `mix.exs`.
 
 ```elixir
 defp deps
-  [{:ex_twiml, "~> 2.1.0"}]
+  [{:ex_twiml, "~> 2.1.1"}]
 end
 ```
 
@@ -41,7 +41,7 @@ Then run `mix deps.get`, and ExTwiml will be installed.
 
 ## Usage
 
-Import the `ExTwiml` module into your module, and then use the `twiml` macro to 
+Import the `ExTwiml` module into your module, and then use the `twiml` macro to
 generate your TwiML, like so:
 
 ```elixir
@@ -53,7 +53,7 @@ defmodule YourModule do
       play "/assets/welcome.mp3"
       gather digits: 4, finish_on_key: "#" do
         say """
-        Please enter the last four digits of your credit card number, followed 
+        Please enter the last four digits of your credit card number, followed
         by the pound sign.
         """, voice: "woman"
       end
@@ -62,7 +62,7 @@ defmodule YourModule do
 end
 ```
 
-You can then render the TwiML by calling `YourModule.render/0`. The output will 
+You can then render the TwiML by calling `YourModule.render/0`. The output will
 be a binary in this format:
 
 ```xml

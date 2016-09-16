@@ -4,7 +4,7 @@ defmodule ExTwiml.Mixfile do
   def project do
     [app: :ex_twiml,
      description: "Generate TwiML with Elixir",
-     version: "2.1.0",
+     version: "2.1.1",
      elixir: "~> 1.0",
      deps: deps,
      dialyzer: [
@@ -32,8 +32,8 @@ defmodule ExTwiml.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:ex_doc, only: :docs},
-      {:inch_ex, only: :docs}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :docs]},
+      {:inch_ex, ">= 0.0.0", only: :docs}
     ]
   end
 

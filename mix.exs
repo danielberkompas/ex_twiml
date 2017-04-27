@@ -6,12 +6,12 @@ defmodule ExTwiml.Mixfile do
      description: "Generate TwiML with Elixir",
      version: "2.1.2",
      elixir: "~> 1.0",
-     deps: deps,
+     deps: deps(),
      dialyzer: [
-       plt_file: "#{System.get_env("HOME")}/#{plt_filename}",
+       plt_file: "#{System.get_env("HOME")}/#{plt_filename()}",
        flags: ["--no_native", "-Wno_match", "-Wno_return"]
      ],
-     package: package]
+     package: package()]
   end
 
   # Configuration for the OTP application
@@ -49,7 +49,7 @@ defmodule ExTwiml.Mixfile do
   end
 
   defp plt_filename do
-    "elixir-#{System.version}_#{otp_release}.plt"
+    "elixir-#{System.version}_#{otp_release()}.plt"
   end
 
   defp otp_release do

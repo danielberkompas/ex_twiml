@@ -21,7 +21,7 @@ defmodule ExTwiml.Utilities do
   """
   @spec create_tag(atom, atom, Keyword.t) :: String.t
   def create_tag(type, name, options \\ []) do
-    options = Dict.merge(defaults(name), options)
+    options = Keyword.merge(defaults(name), options)
     do_create_tag(type, capitalize(name), xml_attributes(options))
   end
 
@@ -99,6 +99,6 @@ defmodule ExTwiml.Utilities do
   end
 
   defp do_camelize([first, rest], _) do
-    downcase(first) <> Mix.Utils.camelize(rest)
+    downcase(first) <> Macro.camelize(rest)
   end
 end

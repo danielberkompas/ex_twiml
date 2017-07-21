@@ -290,6 +290,31 @@ defmodule ExTwimlTest do
       Macro.expand(ast, __ENV__)
     end
   end
+  test "escape message body" do
+    markup = twiml do
+      message do
+        body "hello :<"
+      end
+    end
+
+    assert_twiml markup, "<Message><Body>hello :&lt;</Body></Message>"
+  end
+
+  test "escape simple text" do
+    markup = twiml do
+        text "hello :<"
+    end
+
+    assert_twiml markup, "hello :&lt;"
+  end
+
+  test "escape attribute" do
+    markup = twiml do
+      tag :mms, to: "112345'" do text "hello" end
+    end
+
+    assert_twiml markup, "<Mms to=\"112345&apos;\">hello</Mms>"
+  end
 
   defp assert_twiml(lhs, rhs) do
     assert lhs == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>#{rhs}</Response>"

@@ -129,5 +129,7 @@ defmodule ExTwiml.Utilities do
     |> replace("&", "&amp;")
     |> replace("<", "&lt;")
     |> replace(">", "&gt;")
+    |> replace("\"", "&quot;")
+    |> replace("'", "&apos;")
   end
 end

@@ -123,7 +123,7 @@ defmodule ExTwimlTest do
       task ~s({"selected_language": "it"})
     end
 
-    assert_twiml markup, ~s(<Task>{"selected_language": "it"}</Task>)
+    assert_twiml markup, ~s(<Task>{&quot;selected_language&quot;: &quot;it&quot;}</Task>)
   end
 
   test "can render the <Task> verb nested inside an <Enqueue> verb" do
@@ -133,7 +133,7 @@ defmodule ExTwimlTest do
       end
     end
 
-    assert_twiml markup, ~s(<Enqueue><Task>{"selected_language": "it"}</Task></Enqueue>)
+    assert_twiml markup, ~s(<Enqueue><Task>{&quot;selected_language&quot;: &quot;it&quot;}</Task></Enqueue>)
   end
 
   test "can render the <Leave> verb" do
@@ -253,7 +253,7 @@ defmodule ExTwimlTest do
       say "I'm Alice", options
     end
 
-    assert_twiml markup, "<Say voice=\"alice\">I'm Alice</Say>"
+    assert_twiml markup, "<Say voice=\"alice\">I&apos;m Alice</Say>"
   end
 
   test ".twiml self-closing verbs can take options as a variable" do

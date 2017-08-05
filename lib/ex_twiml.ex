@@ -152,7 +152,7 @@ defmodule ExTwiml do
   """
   defmacro text(string) do
     quote do
-      put_buffer var!(buffer, Twiml), to_string(unquote(string))
+      put_buffer var!(buffer, Twiml), escape_text(to_string(unquote(string)))
     end
   end
 
@@ -191,7 +191,7 @@ defmodule ExTwiml do
   # {:text, [], ["Hello World"]}
   defp postwalk({:text, _meta, [string]}) do
     # Just add the text to the buffer. Nothing else needed.
-    quote do: put_buffer(var!(buffer, Twiml), to_string(unquote(string)))
+    quote do: text unquote(string)
   end
 
   # {:gather, [], [[do: inner]]}

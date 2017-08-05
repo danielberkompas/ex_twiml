@@ -3,7 +3,7 @@ defmodule ExTwiml.Utilities do
   A grab bag of helpful functions used to generate XML.
   """
 
-  import String, only: [downcase: 1]
+  import String, only: [downcase: 1, replace: 3]
 
   @doc """
   Generates an XML tag.
@@ -72,7 +72,7 @@ defmodule ExTwiml.Utilities do
   def xml_attributes(attrs) do
     for {key, val} <- attrs,
         into: "",
-        do: " #{camelize(key)}=\"#{val}\""
+        do: " #{camelize(key)}=\"#{escape_attr(to_string(val))}\""
   end
 
   @doc """
@@ -100,5 +100,36 @@ defmodule ExTwiml.Utilities do
 
   defp do_camelize([first, rest], _) do
     downcase(first) <> Macro.camelize(rest)
+  end
+
+  @doc """
+  escape special characters in XML attributes
+
+  Note: we must to escape only "&" and "<",
+  but, its common to escape more special characters
+  """
+  @spec escape_attr(String.t) :: String.t
+  def escape_attr(string) do
+    string
+    |> replace("&", "&amp;")
+    |> replace("<", "&lt;")
+    |> replace(">", "&gt;")
+    |> replace("\"", "&quot;")
+    |> replace("'", "&apos;")
+    |> replace("\x0d", "&#xd;")
+    |> replace("\x0a", "&#xa;")
+  end
+
+  @doc """
+  escape special characters in XML text
+  """
+  @spec escape_text(String.t) :: String.t
+  def escape_text(string) do
+    string
+    |> replace("&", "&amp;")
+    |> replace("<", "&lt;")
+    |> replace(">", "&gt;")
+    |> replace("\"", "&quot;")
+    |> replace("'", "&apos;")
   end
 end

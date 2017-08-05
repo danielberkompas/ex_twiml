@@ -123,7 +123,7 @@ defmodule ExTwimlTest do
       task ~s({"selected_language": "it"})
     end
 
-    assert_twiml markup, ~s(<Task>{"selected_language": "it"}</Task>)
+    assert_twiml markup, ~s(<Task>{&quot;selected_language&quot;: &quot;it&quot;}</Task>)
   end
 
   test "can render the <Task> verb nested inside an <Enqueue> verb" do
@@ -133,7 +133,7 @@ defmodule ExTwimlTest do
       end
     end
 
-    assert_twiml markup, ~s(<Enqueue><Task>{"selected_language": "it"}</Task></Enqueue>)
+    assert_twiml markup, ~s(<Enqueue><Task>{&quot;selected_language&quot;: &quot;it&quot;}</Task></Enqueue>)
   end
 
   test "can render the <Leave> verb" do
@@ -253,7 +253,7 @@ defmodule ExTwimlTest do
       say "I'm Alice", options
     end
 
-    assert_twiml markup, "<Say voice=\"alice\">I'm Alice</Say>"
+    assert_twiml markup, "<Say voice=\"alice\">I&apos;m Alice</Say>"
   end
 
   test ".twiml self-closing verbs can take options as a variable" do
@@ -289,6 +289,31 @@ defmodule ExTwimlTest do
       # Simulate compiling the macro
       Macro.expand(ast, __ENV__)
     end
+  end
+  test "escape message body" do
+    markup = twiml do
+      message do
+        body "hello :<"
+      end
+    end
+
+    assert_twiml markup, "<Message><Body>hello :&lt;</Body></Message>"
+  end
+
+  test "escape simple text" do
+    markup = twiml do
+        text "hello :<"
+    end
+
+    assert_twiml markup, "hello :&lt;"
+  end
+
+  test "escape attribute" do
+    markup = twiml do
+      tag :mms, to: "112345'" do text "hello" end
+    end
+
+    assert_twiml markup, "<Mms to=\"112345&apos;\">hello</Mms>"
   end
 
   defp assert_twiml(lhs, rhs) do

@@ -2,7 +2,18 @@
 
 ## [Unreleased](https://github.com/danielberkompas/ex_twiml/tree/HEAD)
 
-[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.1.0...HEAD)
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.1.2...HEAD)
+
+**Merged pull requests:**
+
+- Escape special characters [\#19](https://github.com/danielberkompas/ex_twiml/pull/19) ([gliush](https://github.com/gliush))
+- Elixir14 [\#18](https://github.com/danielberkompas/ex_twiml/pull/18) ([joshuafleck](https://github.com/joshuafleck))
+
+## [v2.1.2](https://github.com/danielberkompas/ex_twiml/tree/v2.1.2) (2016-09-16)
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.1.1...v2.1.2)
+
+## [v2.1.1](https://github.com/danielberkompas/ex_twiml/tree/v2.1.1) (2016-09-16)
+[Full Changelog](https://github.com/danielberkompas/ex_twiml/compare/v2.1.0...v2.1.1)
 
 **Closed issues:**
 
@@ -72,9 +83,6 @@
 **Implemented enhancements:**
 
 - Script to generate releases [\#2](https://github.com/danielberkompas/ex_twiml/pull/2) ([danielberkompas](https://github.com/danielberkompas))
-
-**Merged pull requests:**
-
 - Add "option" feature [\#1](https://github.com/danielberkompas/ex_twiml/pull/1) ([danielberkompas](https://github.com/danielberkompas))
 
 ## [1.0.0](https://github.com/danielberkompas/ex_twiml/tree/1.0.0) (2015-03-10)

@@ -39,7 +39,7 @@ defmodule ExTwiml.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README.md", "CHANGELOG.md", "SIGNED.md", "LICENSE"],
+      files: ["lib", "mix.exs", "README.md", "CHANGELOG.md", "LICENSE"],
       maintainers: ["Daniel Berkompas"],
       licenses: ["MIT"],
       links: %{

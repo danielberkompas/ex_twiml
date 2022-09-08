@@ -75,10 +75,10 @@ defmodule ExTwiml do
 
     # Non-nested
     :say, :number, :play, :sms, :sip, :client, :conference, :queue, :enqueue,
-    :redirect, :body, :media
+    :redirect, :body, :media, :identity
   ]
 
-  @simple_verbs [:leave, :hangup, :reject, :pause, :record]
+  @simple_verbs [:leave, :hangup, :reject, :pause, :record, :parameter]
 
   @doc """
   Start creating a TwiML document. Returns the rendered TwiML as a string.

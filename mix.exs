@@ -49,7 +49,7 @@ defmodule ExTwiml.Mixfile do
   end
 
   defp plt_filename do
-    "elixir-#{System.version}_#{otp_release()}.plt"
+    "elixir-#{System.version()}_#{otp_release()}.plt"
   end
 
   defp otp_release do

@@ -3,7 +3,6 @@ ExTwiml
 [![Build Status](https://danielberkompas.semaphoreci.com/badges/ex_twiml/branches/master.svg?style=shields)](https://danielberkompas.semaphoreci.com/projects/ex_twiml)
 [![Hex Version](http://img.shields.io/hexpm/v/ex_twiml.svg)](https://hex.pm/packages/ex_twiml)
 [![Inline docs](http://inch-ci.org/github/danielberkompas/ex_twiml.svg?branch=master)](http://inch-ci.org/github/danielberkompas/extwiml)
-[![Deps Status](https://beta.hexfaktor.org/badge/all/github/danielberkompas/ex_twiml.svg)](https://beta.hexfaktor.org/github/danielberkompas/ex_twiml)
 
 Generate TwiML for your [Twilio](http://twilio.com) integration, right inside
 Elixir! Built to be used with [Telephonist](https://github.com/danielberkompas/telephonist),
@@ -15,7 +14,7 @@ ExTwiml can be installed through mix as a hex package. First, update your
 dependencies in `mix.exs`.
 
 ```elixir
-defp deps
+defp deps do
   [{:ex_twiml, "~> 2.1.3"}]
 end
 ```
@@ -23,7 +22,7 @@ end
 If you prefer, you can depend on the latest version from Github:
 
 ```elixir
-defp deps
+defp deps do
   [{:ex_twiml, github: "danielberkompas/ex_twiml"}]
 end
 ```

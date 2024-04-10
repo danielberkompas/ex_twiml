@@ -3,7 +3,7 @@ name: CI Build
 agent:
   machine:
     type: e1-standard-2
-    os_image: ubuntu1804
+    os_image: ubuntu2004
 auto_cancel:
   running:
     when: 'true'
@@ -24,7 +24,8 @@ blocks:
           matrix:
             - env_var: ELIXIR_VERSION
               values:
-                - 1.11.3
+                - 1.12.0
+                - 1.16.2
           commands:
             - sem-version elixir $ELIXIR_VERSION
             - checkout
@@ -34,5 +35,5 @@ blocks:
             - mix deps.get
             - mix test
             - MIX_ENV=docs mix deps.get
-            - MIX_ENV=docs mix inch.report
+            - MIX_ENV=docs mix docs
             - cache store
